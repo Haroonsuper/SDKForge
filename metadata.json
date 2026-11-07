@@ -1,0 +1,6 @@
+{
+  "name": "SDKForge - Postman & OpenAPI to SDK Engine",
+  "description": "Enterprise developer platform to parse Postman and Swagger/OpenAPI specifications and generate production-ready TypeScript, Python, and Go SDKs with automated packaging and multi-tenant delivery.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}
