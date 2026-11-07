@@ -1,0 +1,140 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+  }
+
+  body {
+    font-family: var(--font-sans);
+  }
+
+  code, pre, kbd {
+    font-family: var(--font-mono);
+  }
+}
+
+/* Custom scrollbars for high-density code and file views */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.2);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.4);
+}
+
+
+/* =========================================================================
+   3D LAYER - pure CSS (no extra JS / dependencies). Respects reduced motion.
+   ========================================================================= */
+
+/* Perspective grid floor behind the whole app */
+.scene-3d {
+  position: relative;
+  isolation: isolate;
+}
+.scene-3d::before {
+  content: "";
+  position: fixed;
+  inset: auto -50% -10% -50%;
+  height: 65vh;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right, rgba(99, 102, 241, 0.22) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(99, 102, 241, 0.22) 1px, transparent 1px);
+  background-size: 56px 56px;
+  transform: perspective(520px) rotateX(62deg);
+  transform-origin: center bottom;
+  -webkit-mask-image: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent 85%);
+  mask-image: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent 85%);
+}
+.scene-3d::after {
+  content: "";
+  position: fixed;
+  top: -20vh;
+  left: 50%;
+  width: 70vw;
+  height: 50vh;
+  z-index: -1;
+  pointer-events: none;
+  transform: translateX(-50%);
+  background: radial-gradient(closest-side, rgba(99, 102, 241, 0.18), transparent);
+}
+
+/* Cards that lift and tilt toward the viewer */
+.card-3d {
+  transform-style: preserve-3d;
+  transform: perspective(900px) translateZ(0);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04) inset, 0 10px 24px -12px rgba(0, 0, 0, 0.7);
+}
+.card-3d:hover {
+  transform: perspective(900px) rotateX(4deg) rotateY(-5deg) translateZ(14px);
+  border-color: rgba(129, 140, 248, 0.55);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.06) inset,
+              12px 20px 32px -14px rgba(79, 70, 229, 0.55),
+              0 0 0 1px rgba(129, 140, 248, 0.15);
+}
+
+/* Large panels: subtle depth only (no tilt, so code stays perfectly readable) */
+.panel-3d {
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.05) inset,
+              0 24px 48px -24px rgba(0, 0, 0, 0.85),
+              0 0 0 1px rgba(99, 102, 241, 0.06);
+}
+
+/* Rotating cube logo */
+.logo-cube {
+  --s: 14px;
+  width: var(--s);
+  height: var(--s);
+  position: relative;
+  display: inline-block;
+  transform-style: preserve-3d;
+  animation: cube-spin 9s linear infinite;
+}
+.logo-cube > i {
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(165, 180, 252, 0.9);
+  background: rgba(99, 102, 241, 0.35);
+}
+.logo-cube > i:nth-child(1) { transform: translateZ(calc(var(--s) / 2)); }
+.logo-cube > i:nth-child(2) { transform: rotateY(180deg) translateZ(calc(var(--s) / 2)); }
+.logo-cube > i:nth-child(3) { transform: rotateY(90deg) translateZ(calc(var(--s) / 2)); }
+.logo-cube > i:nth-child(4) { transform: rotateY(-90deg) translateZ(calc(var(--s) / 2)); }
+.logo-cube > i:nth-child(5) { transform: rotateX(90deg) translateZ(calc(var(--s) / 2)); }
+.logo-cube > i:nth-child(6) { transform: rotateX(-90deg) translateZ(calc(var(--s) / 2)); }
+@keyframes cube-spin {
+  from { transform: rotateX(-24deg) rotateY(0deg); }
+  to   { transform: rotateX(-24deg) rotateY(360deg); }
+}
+
+/* Buttons that press down like physical keys */
+.btn-3d {
+  box-shadow: 0 4px 0 0 rgba(49, 46, 129, 0.95), 0 10px 16px -6px rgba(79, 70, 229, 0.6);
+  transform: translateY(0);
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+.btn-3d:hover { transform: translateY(-1px); }
+.btn-3d:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 0 rgba(49, 46, 129, 0.95), 0 4px 8px -4px rgba(79, 70, 229, 0.6);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .logo-cube { animation: none; transform: rotateX(-24deg) rotateY(35deg); }
+  .card-3d, .card-3d:hover, .btn-3d, .btn-3d:hover, .btn-3d:active { transform: none; transition: none; }
+}
