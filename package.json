@@ -6,7 +6,7 @@
   "engines": { "node": ">=20" },
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "build": "tsc -p tsconfig.json",
+    "build": "vite build",
     "start": "node dist/server.js",
     "lint": "tsc --noEmit",
     "test": "tsx --test test/*.test.ts"
